@@ -39,3 +39,8 @@ Visualize a result (for jupyter-notebook `show_only=False`).
 ```python
 pm.render(show_only=True, save_path=None)
 ```
+Visualize & Save the result (tested for Jupyter notbook): 
+```python
+pm.render(show_only=False, save_path="C:\\PATH\\PATH....\\YOUR_FILENAME.dot")
+```
+This will make sure to save the Generated Process Graph in terms of png format. 
