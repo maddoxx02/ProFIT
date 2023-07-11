@@ -59,6 +59,7 @@ class Renderer(Observer):
         G.attr('node', shape='box', style='filled', fontname='Sans Not-Rotated 14')
         
         # 1. Node color and shape
+        
         F = dict() # Activities absolute frequencies
         for a, a_freq in nodes.items():
             if type(a_freq[-1]) == dict:
@@ -68,6 +69,8 @@ class Renderer(Observer):
                 F[a] = a_freq[0]
         case_cnt = sum([v[0] for v in T['start'].values()])
         x_max, x_min = max(F.values()), min(F.values())
+
+
         for a, a_freq in nodes.items():
             color = int((x_max - F[a]) / (x_max - x_min + 1e-6) * 100.)
             fill, font = "#ffffff", 'black'
@@ -87,14 +90,17 @@ class Renderer(Observer):
                 for i in range(1, len(a)):
                     node_label += '\n' + str(a[i]) + add_counts[i]
                 node_label += '\n(' + str(a_freq[0]) + ')'
-                G.node(str(a), label=node_label, fillcolor=fill, fontcolor=font, shape='octagon')
+                G.node(str(a), label=None, fillcolor=fill, fontcolor=font, shape='octagon')#none = node_label
             else:
                 node_label = _decorate_label(str(a)) + '\n(' + str(F[a]) + ')'
-                G.node(str(a), label=node_label, fillcolor=fill, fontcolor=font)
-        G.node("start", shape="circle", label=str(case_cnt),
+                G.node(str(a), label=None, fillcolor=fill, fontcolor=font)#none = node_label
+
+        G.node("start", shape="circle", label=None, #str(case_cnt)
                fillcolor="#95d600" if colored else "#ffffff", margin='0.05')
+               
         G.node("end", shape="doublecircle", label='',
                fillcolor="#ea4126" if colored else "#ffffff")
+        
         
         # 2. Edge thickness and style
         values = [freq[0] for freq in edges.values()]
@@ -104,10 +110,10 @@ class Renderer(Observer):
                 G.edge(str(e[0]), str(e[1]), style='dotted')
                 continue
             if (e[0] == 'start') | (e[1] == 'end'):
-                G.edge(str(e[0]), str(e[1]), label=str(freq[0]), style='dashed')
+                G.edge(str(e[0]), str(e[1]), label= None, style='dashed') #str(freq[0])
             else:
                 y = 1.0 + (5.0 - 1.0) * (freq[0] - t_min) / (t_max - t_min + 1e-6)
-                G.edge(str(e[0]), str(e[1]), label=str(freq[0]), penwidth=str(y))
+                G.edge(str(e[0]), str(e[1]), label = None, penwidth=str(y)) #, label=str(freq[0])
         
         self.GV = G
 
