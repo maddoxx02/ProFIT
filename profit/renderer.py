@@ -6,6 +6,7 @@ color_map = {range(0,10) : "#1d2559", range(10,20) : "#203078",
 from observer_abc import Observer
 import graphviz as gv
 import os
+import re
 
 DECORATE = False
 
@@ -110,10 +111,10 @@ class Renderer(Observer):
                 G.edge(str(e[0]), str(e[1]), style='dotted')
                 continue
             if (e[0] == 'start') | (e[1] == 'end'):
-                G.edge(str(e[0]), str(e[1]), label= None, style='dashed') #str(freq[0])
+                G.edge(str(e[0]), str(e[1]), label= re.sub("\d"," "*len(str(freq[0])), str(freq[0])), style='dashed') #str(freq[0])
             else:
                 y = 1.0 + (5.0 - 1.0) * (freq[0] - t_min) / (t_max - t_min + 1e-6)
-                G.edge(str(e[0]), str(e[1]), label = None, penwidth=str(y)) #, label=str(freq[0])
+                G.edge(str(e[0]), str(e[1]), label = re.sub("\d"," "*len(str(freq[0])), str(freq[0])), penwidth=str(y)) #, label=str(freq[0])
         
         self.GV = G
 
